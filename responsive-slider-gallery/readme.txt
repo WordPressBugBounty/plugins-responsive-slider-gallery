@@ -1,15 +1,14 @@
 === Responsive Slider Gallery - Image Slideshow Maker ===
 Contributors: awordpresslife, razipathhan, hanif0991, muhammadshahid, fkfaisalkhan007, sharikkhan007, zishlife, FARAZFRANK
 Donate link: https://paypal.me/awplife
-Tags: slider, slideshow maker, photo slider, image slider, slideshow creator, responsive slider 
+Tags: slider, photo slider, image slider, slideshow creator, responsive slider 
 Requires at least: 3.0
-Tested up to: 6.7.1
-Stable tag: 1.4.7
+Tested up to: 6.7.2
+Stable tag: 1.4.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Responsive Slider Gallery plugin for WordPress, A responsive slider plugin, Easy Powerful CSS & JS Based Image Slider Builder Plugin.
-Slideshow, Carousel, Responsive Image Slider, Photo slider.
+Responsive Slider Gallery plugin for WordPress. Easy, powerful CSS & JS-based builder for slideshows, carousels & photo sliders effortlessly!
 
 == Description ==
 
@@ -152,6 +151,10 @@ The following are other recommended plugins by the author:
 11. Slide Show Preview
 
 == Changelog ==
+
+= 1.4.8 =
+
+* Testing plugin for wordpress 6.7.2
 
 = 1.4.7 =
 
