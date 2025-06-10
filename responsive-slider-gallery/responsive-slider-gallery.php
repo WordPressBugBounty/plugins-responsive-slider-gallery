@@ -6,7 +6,7 @@
 Plugin Name: Responsive Slider Gallery
 Plugin URI: https://awplife.com/wordpress-plugins/responsive-slider-gallery-premium/
 Description: A Responsive Simple Beautiful Easy Powerful CSS & JS Based WordPress Image Slider Gallery Plugin [standard]
-Version: 1.4.8
+Version: 1.4.9
 Author: A WP Life
 Author URI: https://awplife.com/
 License: GPLv2 or later
@@ -44,7 +44,7 @@ if ( ! class_exists( 'Responsive_Slider_Gallery' ) ) {
 			/**
 			 * Plugin Version
 			 */
-			define( 'RSG_PLUGIN_VER', '1.4.8' );
+			define( 'RSG_PLUGIN_VER', '1.4.9' );
 
 			/**
 			 * Plugin Text Domain
