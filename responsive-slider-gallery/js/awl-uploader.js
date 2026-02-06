@@ -11,11 +11,10 @@ jQuery(function(jQuery) {
             });			
 			
             /**
-			 * Add Slide Callback Funtion
+			 * Add Slide Callback Function
 			 */
             jQuery('#add-new-slider').on('click', function(event) {
 				var rsg_add_images_nonce = jQuery("#rsg_add_images_nonce").val();
-				console.log(rsg_add_images_nonce);
                 event.preventDefault();
                 if (file_frame) {
                     file_frame.open();
@@ -39,8 +38,8 @@ jQuery(function(jQuery) {
 			 * Delete Slide Callback Function
 			 */
             this.ul.on('click', '#remove-slide', function() {
-                if (confirm('Do you wnat to delete this slide?')) {
-                    jQuery(this).parent().fadeOut(700, function() {
+                if (confirm('Do you want to delete this slide?')) {
+                    jQuery(this).parent().parent().fadeOut(700, function() {
                         jQuery(this).remove();
                     });
                 }
