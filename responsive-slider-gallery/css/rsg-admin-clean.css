@@ -199,7 +199,7 @@
   border-radius: 12px !important;
   border: 1px solid #e5e7eb !important;
   padding: 12px !important;
-  transition: all 0.2s ease !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
   list-style: none !important;
   display: block !important;
@@ -207,12 +207,26 @@
   width: 100% !important;
   max-width: 100% !important;
   box-sizing: border-box !important;
+  cursor: grab !important;
+  user-select: none !important;
+}
+
+.rsg-gallery-item:active {
+  cursor: grabbing !important;
 }
 
 .rsg-gallery-item:hover {
   transform: translateY(-4px) !important;
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1) !important;
   border-color: #d1d5db !important;
+}
+
+.ui-sortable-helper.rsg-gallery-item {
+  cursor: grabbing !important;
+  z-index: 1000 !important;
+  transition: none !important;
+  transform: scale(1.05) !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
 }
 
 .rsg-slide-image-wrapper {
@@ -449,9 +463,14 @@
 
 .ui-sortable-placeholder {
   visibility: visible !important;
-  background: #f3f4f6 !important;
-  border: 2px dashed #d1d5db !important;
+  background: #f8fafc !important;
+  border: 2px dashed #94a3b8 !important;
   border-radius: 12px !important;
+  box-sizing: border-box !important;
+  grid-column: span 1 / auto !important;
+  margin: 0 !important;
+  height: auto !important;
+  min-height: 100px !important;
 }
 
 /* ========================================
@@ -501,266 +520,286 @@ ul.rsg-gallery-grid {
    UPGRADE PAGE STYLES
    ======================================== */
 
+/* ========================================
+   UPGRADE PAGE STYLES - SIMPLIFIED & CLEAN
+   ======================================== */
+
 .rsg-upgrade-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 40px 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
 }
 
 /* Hero Section */
 .rsg-upgrade-hero {
-  text-align: center;
-  padding: 60px 40px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 16px;
-  color: #fff;
-  margin-bottom: 50px;
-  box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+    text-align: center;
+    padding: 60px 40px;
+    background: #1e293b;
+    border-radius: 12px;
+    color: #fff;
+    margin-bottom: 40px;
 }
 
 .rsg-upgrade-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.2);
-  padding: 8px 20px;
-  border-radius: 50px;
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 20px;
-  backdrop-filter: blur(10px);
-}
-
-.rsg-upgrade-badge .dashicons {
-  font-size: 16px;
-  width: 16px;
-  height: 16px;
-  color: #fbbf24;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 6px 16px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #fbbf24;
 }
 
 .rsg-upgrade-title {
-  font-size: 48px;
-  font-weight: 700;
-  margin: 0 0 16px 0;
-  color: #fff;
-  line-height: 1.2;
+    font-size: 40px;
+    font-weight: 700;
+    margin: 0 0 16px 0;
+    color: #fff;
 }
 
 .rsg-upgrade-description {
-  font-size: 18px;
-  color: rgba(255, 255, 255, 0.9);
-  margin: 0 0 40px 0;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+    font-size: 18px;
+    color: #94a3b8;
+    margin: 0 0 40px 0;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* Pricing Box */
 .rsg-pricing-box {
-  margin-bottom: 40px;
+    margin-bottom: 40px;
 }
 
 .rsg-price-tag {
-  display: inline-block;
-  background: rgba(255, 255, 255, 0.15);
-  padding: 24px 40px;
-  border-radius: 12px;
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-}
-
-.rsg-price-label {
-  display: block;
-  font-size: 14px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 12px;
-  color: #fbbf24;
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 24px 40px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .rsg-price-amount {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
 }
 
 .rsg-price-old {
-  font-size: 28px;
-  text-decoration: line-through;
-  color: rgba(255, 255, 255, 0.6);
-  font-weight: 500;
+    font-size: 24px;
+    text-decoration: line-through;
+    color: #64748b;
 }
 
 .rsg-price-new {
-  font-size: 56px;
-  font-weight: 800;
-  color: #fff;
-  line-height: 1;
-}
-
-.rsg-price-save {
-  background: #10b981;
-  color: #fff;
-  padding: 6px 16px;
-  border-radius: 50px;
-  font-size: 14px;
-  font-weight: 700;
+    font-size: 48px;
+    font-weight: 700;
+    color: #fff;
 }
 
 /* Upgrade Buttons */
 .rsg-upgrade-actions {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  flex-wrap: wrap;
+    display: flex;
+    gap: 16px;
+    justify-content: center;
 }
 
 .rsg-btn-upgrade-primary,
 .rsg-btn-upgrade-secondary {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 16px 32px;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
+    padding: 14px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.2s ease;
 }
 
 .rsg-btn-upgrade-primary {
-  background: #fff;
-  color: #667eea;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+    background: #3b82f6;
+    color: #fff;
 }
 
 .rsg-btn-upgrade-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-  color: #667eea;
+    background: #2563eb;
+    color: #fff;
 }
 
 .rsg-btn-upgrade-secondary {
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(10px);
+    background: transparent;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .rsg-btn-upgrade-secondary:hover {
-  background: rgba(255, 255, 255, 0.25);
-  border-color: rgba(255, 255, 255, 0.5);
-  transform: translateY(-2px);
-  color: #fff;
+    background: rgba(255, 255, 255, 0.05);
 }
 
-.rsg-btn-upgrade-primary .dashicons,
-.rsg-btn-upgrade-secondary .dashicons {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-}
-
-/* Features Grid */
-.rsg-features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 24px;
-  margin-top: 40px;
+/* Simplified Feature Grid */
+.rsg-upgrade-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 60px;
 }
 
 .rsg-feature-card {
-  background: #fff;
-  padding: 32px 24px;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
-  text-align: center;
-  transition: all 0.3s ease;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    gap: 16px;
+    transition: all 0.2s ease;
 }
 
 .rsg-feature-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-  border-color: #667eea;
+    border-color: #3b82f6;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .rsg-feature-icon {
-  width: 64px;
-  height: 64px;
-  margin: 0 auto 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    background: #eff6ff;
+    color: #3b82f6;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .rsg-feature-icon .dashicons {
-  font-size: 32px;
-  width: 32px;
-  height: 32px;
-  color: #fff;
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
 }
 
-.rsg-feature-card h3 {
-  font-size: 18px;
-  font-weight: 700;
-  color: #111827;
-  margin: 0 0 12px 0;
+.rsg-feature-content h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: #1e293b;
 }
 
-.rsg-feature-card p {
-  font-size: 14px;
-  color: #6b7280;
-  margin: 0;
-  line-height: 1.6;
+.rsg-feature-content p {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.5;
 }
 
-/* Responsive Design for Upgrade Page */
-@media (max-width: 768px) {
-  .rsg-upgrade-hero {
-    padding: 40px 24px;
-  }
+/* Comparison Section */
+.rsg-comparison-section {
+    margin-top: 60px;
+}
 
-  .rsg-upgrade-title {
-    font-size: 32px;
-  }
+.rsg-section-title {
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 40px;
+    color: #1e293b;
+}
 
-  .rsg-upgrade-description {
-    font-size: 16px;
-  }
+.rsg-comparison-table-container {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+}
 
-  .rsg-price-new {
-    font-size: 42px;
-  }
-
-  .rsg-upgrade-actions {
-    flex-direction: column;
-  }
-
-  .rsg-btn-upgrade-primary,
-  .rsg-btn-upgrade-secondary {
+.rsg-comparison-table {
     width: 100%;
-    justify-content: center;
-  }
-
-  .rsg-features-grid {
-    grid-template-columns: 1fr;
-  }
+    border-collapse: collapse;
 }
 
-/* ========================================
-   HIDE PERMALINK SECTION - ONLY ON PLUGIN PAGES
-   ======================================== */
+.rsg-comparison-table th {
+    background: #f8fafc;
+    padding: 16px 24px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #64748b;
+    border-bottom: 1px solid #e2e8f0;
+}
 
-/* Hide permalink only on our plugin's edit pages */
+.rsg-comparison-table th:not(:first-child),
+.rsg-comparison-table td:not(:first-child) {
+    text-align: center;
+}
+
+.rsg-comparison-table td {
+    padding: 16px 24px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 15px;
+    color: #334155;
+}
+
+.rsg-comparison-table tr:last-child td {
+    border-bottom: none;
+}
+
+.rsg-check-icon { color: #10b981; }
+.rsg-cross-icon { color: #cbd5e1; }
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .rsg-upgrade-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .rsg-upgrade-grid { grid-template-columns: 1fr; }
+    .rsg-upgrade-hero { padding: 40px 20px; }
+    .rsg-upgrade-title { font-size: 32px; }
+    .rsg-comparison-table-container { overflow-x: auto; }
+}
+
+/* Hide permalink section on plugin pages */
 .post-type-responsive_slider #edit-slug-box {
-  display: none !important;
+    display: none !important;
 }
 
+/* Return to top button */
+.rsg-return-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 48px;
+    height: 48px;
+    background: #3b82f6;
+    color: #fff !important;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none !important;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.rsg-return-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.rsg-return-to-top:hover {
+    background: #2563eb;
+    transform: translateY(-4px);
+}
+
+.rsg-return-to-top .dashicons {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+}

@@ -7,140 +7,112 @@
  * @return    Create Fontend Slider Gallery Output
  */
 add_shortcode('responsive-slider', 'responsive_slider_shortcode');
-function responsive_slider_shortcode($post_id)
+function responsive_slider_shortcode($atts)
 {
-	wp_enqueue_script('awl-fotorama-js');
-	wp_enqueue_style('awl-fotorama-css');
-	ob_start();
-	$allslides = array(
-		'p' => $post_id['id'],
-		'post_type' => 'responsive_slider',
-	);
-	$allslides_loop = new WP_Query($allslides);
-	while ($allslides_loop->have_posts()):
-		$allslides_loop->the_post();
-		$post_id = get_the_ID();
-		$allslidesetting = unserialize(base64_decode(get_post_meta($post_id, 'awl_slider_settings_' . $post_id, true)));
-		// start the sider contents
-		if (isset($allslidesetting['width'])) {
-			$width = $allslidesetting['width'];
-		} else {
-			$width = '100%';
-		}
-		if (isset($allslidesetting['height'])) {
-			$height = $allslidesetting['height'];
-		} else {
-			$height = '';
-		}
-		if (isset($allslidesetting['nav-style'])) {
-			$navstyle = $allslidesetting['nav-style'];
-		} else {
-			$navstyle = 'dots';
-		}
-		if (isset($allslidesetting['nav-width'])) {
-			$navwidth = $allslidesetting['nav-width'];
-		} else {
-			$navwidth = '';
-		}
-		if (isset($allslidesetting['fullscreen'])) {
-			$fullscreen = $allslidesetting['fullscreen'];
-		} else {
-			$fullscreen = 'true';
-		}
-		if (isset($allslidesetting['fit-slides'])) {
-			$fitslides = $allslidesetting['fit-slides'];
-		} else {
-			$fitslides = 'cover';
-		}
-		if (isset($allslidesetting['transition-duration'])) {
-			$transitionduration = $allslidesetting['transition-duration'];
-		} else {
-			$transitionduration = '300';
-		}
-		if (isset($allslidesetting['slide-text'])) {
-			$slidetext = $allslidesetting['slide-text'];
-		} else {
-			$slidetext = 'false';
-		}
-		if (isset($allslidesetting['autoplay'])) {
-			$autoplay = $allslidesetting['autoplay'];
-		} else {
-			$autoplay = 'true';
-		}
-		if (isset($allslidesetting['loop'])) {
-			$loop = $allslidesetting['loop'];
-		} else {
-			$loop = 'true';
-		}
-		if (isset($allslidesetting['nav-arrow'])) {
-			$navarrow = $allslidesetting['nav-arrow'];
-		} else {
-			$navarrow = 'true';
-		}
-		if (isset($allslidesetting['touch-slide'])) {
-			$touchslide = $allslidesetting['touch-slide'];
-		} else {
-			$touchslide = 'true';
-		}
-		if (isset($allslidesetting['spinner'])) {
-			$spinner = $allslidesetting['spinner'];
-		} else {
-			$spinner = 'true';
-		}
-		?>
-		<div class="fotorama responsive-image-silder" data-width="<?php echo esc_html($width); ?>"
-			data-height="<?php echo esc_html($height); ?>" data-nav="<?php echo esc_html($navstyle); ?>"
-			data-navwidth="<?php echo esc_html($navwidth); ?>" data-allowfullscreen="<?php echo esc_html($fullscreen); ?>"
-			data-fit="<?php echo esc_html($fitslides); ?>"
-			data-transitionduration="<?php echo esc_html($transitionduration); ?>"
-			data-autoplay="<?php echo esc_html($autoplay); ?>" data-loop="<?php echo esc_html($loop); ?>"
-			data-arrows="<?php echo esc_html($navarrow); ?>" data-swipe="<?php echo esc_html($touchslide); ?>"
-			data-spinner="<?php echo esc_html($spinner); ?>" data-transition="slide">
-			<?php
-			if (isset($allslidesetting['slide-ids']) && count($allslidesetting['slide-ids']) > 0) {
-				foreach ($allslidesetting['slide-ids'] as $attachment_id) {
-					$thumb = wp_get_attachment_image_src($attachment_id, 'thumb', true);
-					$thumbnail = wp_get_attachment_image_src($attachment_id, 'thumbnail', true);
-					$medium = wp_get_attachment_image_src($attachment_id, 'medium', true);
-					$large = wp_get_attachment_image_src($attachment_id, 'large', true);
-					$postthumbnail = wp_get_attachment_image_src($attachment_id, 'post-thumbnail', true);
+    // Attributes
+    $atts = shortcode_atts(
+        array(
+            'id' => '',
+        ),
+        $atts,
+        'responsive-slider'
+    );
 
-					$attachment_details = get_post($attachment_id);
-					$href = get_permalink($attachment_details->ID);
-					$src = $attachment_details->guid;
-					$title = $attachment_details->post_title;
-					if ($slidetext == 'true') {
-						$text = $title;
-					} else {
-						$text = '';
-					}
-					?>
-					<img src="<?php echo esc_url($thumb[0]); ?>" data-caption="<?php echo esc_html($text); ?>">
-					<?php
-				}// end of attachment foreach
-			} else {
+    $post_id = absint($atts['id']);
+    if (!$post_id) {
+        return '';
+    }
 
-				_e('Sorry! No slides added to the slider shortcode yet. Please add few slide into shortcode', 'responsive-slider-gallery');
-			} // end of if esle of slides avaialble check into slider
-			?>
-		</div>
-		<?php
-	endwhile;
-	wp_reset_query();
-	return ob_get_clean();
-	?>
-	<!-- HTML Script Part Start From Here-->
-	<script>
-		jQuery(function () {
-			jQuery('.responsive-image-silder').fotorama({
-				spinner: {
-					lines: 13,
-					color: 'rgba(0, 0, 0, .75)',
-					className: 'fotorama',
-				}
-			});
-		});
-	</script>
-	<?php
+    wp_enqueue_script('awl-fotorama-js');
+    wp_enqueue_style('awl-fotorama-css');
+
+    ob_start();
+
+    $query_args = array(
+        'p' => $post_id,
+        'post_type' => 'responsive_slider',
+    );
+    $slider_query = new WP_Query($query_args);
+
+    if ($slider_query->have_posts()):
+        while ($slider_query->have_posts()):
+            $slider_query->the_post();
+            $current_post_id = get_the_ID();
+            $meta_value = get_post_meta($current_post_id, 'awl_slider_settings_' . $current_post_id, true);
+            $allslidesetting = unserialize(base64_decode($meta_value));
+
+            // Default settings
+            $defaults = array(
+                'width' => '100%',
+                'height' => '',
+                'nav-style' => 'dots',
+                'nav-width' => '',
+                'fullscreen' => 'true',
+                'fit-slides' => 'cover',
+                'transition-duration' => '300',
+                'slide-text' => 'false',
+                'autoplay' => 'true',
+                'loop' => 'true',
+                'nav-arrow' => 'true',
+                'touch-slide' => 'true',
+                'spinner' => 'true',
+            );
+
+            $settings = wp_parse_args((array) $allslidesetting, $defaults);
+
+            ?>
+            <div class="fotorama responsive-image-silder" 
+                data-width="<?php echo esc_attr($settings['width']); ?>"
+                data-height="<?php echo esc_attr($settings['height']); ?>" 
+                data-nav="<?php echo esc_attr($settings['nav-style']); ?>"
+                data-navwidth="<?php echo esc_attr($settings['nav-width']); ?>" 
+                data-allowfullscreen="<?php echo esc_attr($settings['fullscreen']); ?>"
+                data-fit="<?php echo esc_attr($settings['fit-slides']); ?>"
+                data-transitionduration="<?php echo esc_attr($settings['transition-duration']); ?>"
+                data-autoplay="<?php echo esc_attr($settings['autoplay']); ?>" 
+                data-loop="<?php echo esc_attr($settings['loop']); ?>"
+                data-arrows="<?php echo esc_attr($settings['nav-arrow']); ?>" 
+                data-swipe="<?php echo esc_attr($settings['touch-slide']); ?>"
+                data-spinner="<?php echo esc_attr($settings['spinner']); ?>" 
+                data-transition="slide">
+                <?php
+                if (isset($settings['slide-ids']) && is_array($settings['slide-ids']) && count($settings['slide-ids']) > 0) {
+                    foreach ($settings['slide-ids'] as $attachment_id) {
+                        $attachment_id = absint($attachment_id);
+                        $full_url = wp_get_attachment_url($attachment_id);
+                        $thumb_url = wp_get_attachment_image_src($attachment_id, 'thumbnail', true);
+                        
+                        $attachment = get_post($attachment_id);
+                        if (!$attachment) continue;
+
+                        $title = $attachment->post_title;
+                        $caption = ($settings['slide-text'] == 'true') ? $title : '';
+                        ?>
+                        <img src="<?php echo esc_url($full_url); ?>" data-thumb="<?php echo esc_url($thumb_url[0]); ?>" data-caption="<?php echo esc_attr($caption); ?>">
+                        <?php
+                    }
+                } else {
+                    echo '<p>' . esc_html__('Sorry! No slides added to the slider shortcode yet. Please add a few slides into the shortcode.', 'responsive-slider-gallery') . '</p>';
+                }
+                ?>
+            </div>
+            
+            <!-- Initialization Script - Inside the container to ensure it's returned by the shortcode -->
+            <script>
+                jQuery(function ($) {
+                    $('.responsive-image-silder').fotorama({
+                        spinner: {
+                            lines: 13,
+                            color: 'rgba(0, 0, 0, .75)',
+                            className: 'fotorama',
+                        }
+                    });
+                });
+            </script>
+            <?php
+        endwhile;
+        wp_reset_postdata();
+    endif;
+
+    return ob_get_clean();
 }
-?>

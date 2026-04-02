@@ -4,7 +4,7 @@ Donate link: https://paypal.me/awplife
 Tags: responsive slider, image slider, slideshow, photo slider, slider gallery
 Requires at least: 5.0
 Tested up to: 6.9
-Stable tag: 1.5.2
+Stable tag: 1.5.3
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -139,6 +139,12 @@ You can adjust the transition speed and autoplay settings in the slider settings
 
 == Changelog ==
 
+= 1.5.3 =
+* Major UI Modernization: Implemented clean, professional "Indigo" design system across the admin dashboard.
+* New Interactive Tab System: Seamless settings navigation using JavaScript (removes page reloads).
+* Performance Optimization: Removed ~1MB of obsolete image assets and redundant code.
+* Enhanced UX: Fixed tab persistence and added "Return to Top" functionality.
+
 = 1.5.1 =
 * Major UI/UX Improvements
 * Setting layout Update
@@ -172,6 +178,9 @@ You can adjust the transition speed and autoplay settings in the slider settings
 * Testing plugin for wordpress 6.4.2
 
 == Upgrade Notice ==
+
+= 1.5.3 =
+Major UI overhaul, performance optimizations, and bug fixes. Highly recommended update.
 
 = 1.5.2 =
 UI/UX improvements and WordPress 6.9 compatibility. Recommended update.

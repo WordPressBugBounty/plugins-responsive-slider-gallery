@@ -7,7 +7,7 @@
  * Plugin Name:       Responsive Slider Gallery
  * Plugin URI:        https://awplife.com/wordpress-plugins/responsive-slider-gallery-premium/
  * Description:       A Responsive Simple Beautiful Easy Powerful CSS & JS Based WordPress Image Slider Gallery Plugin [standard]
- * Version:           1.5.2
+ * Version:           1.5.3
  * Requires at least: 5.4
  * Requires PHP:      7.2
  * Author:            A WP Life
@@ -56,7 +56,7 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 			/**
 			 * Plugin Version
 			 */
-			define('RSG_PLUGIN_VER', '1.5.1');
+			define('RSG_PLUGIN_VER', '1.5.3');
 
 			/**
 			 * Plugin Text Domain
@@ -108,11 +108,6 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 			add_action('init', array($this, '_load_textdomain'));
 
 			/**
-			 * add gallery menu item, change menu filter for multisite
-			 */
-			add_action('admin_menu', array($this, '_rsgallery_menu'), 101);
-
-			/**
 			 * Create Responsive Slider Gallery Custom Post
 			 */
 			add_action('init', array($this, '_Responsive_Slider_Gallery'));
@@ -122,12 +117,8 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 			 */
 			add_action('add_meta_boxes', array($this, '_admin_add_meta_box'));
 
-			/**
-			 * loaded during admin init
-			 */
-			add_action('admin_init', array($this, '_admin_add_meta_box'));
-
 			add_action('wp_ajax_slide', array(&$this, '_ajax_slide'));
+			add_action('wp_ajax_batch_slides', array(&$this, '_ajax_batch_slides'));
 
 			add_action('save_post', array(&$this, '_save_settings'));
 
@@ -149,18 +140,18 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 		public function responsive_enqueue_scripts_in_header()
 		{
 			wp_enqueue_script('jquery');
+			if (is_admin()) {
+				wp_enqueue_script('rsg-admin-js', RSG_PLUGIN_URL . 'js/rsg-admin.js', array('jquery'), RSG_PLUGIN_VER, true);
+			}
 		}
 
 		// Responsiv Slider cpt shortcode column before date columns
 		public function set_responsive_slider_shortcode_column_name($defaults)
 		{
 			$new = array();
-			$shortcode = $columns['responsive_slider_shortcode'];  // save the tags column
-			unset($defaults['tags']);   // remove it from the columns list
-
 			foreach ($defaults as $key => $value) {
-				if ($key == 'date') {  // when we find the date column
-					$new['responsive_slider_shortcode'] = __('Shortcode', 'responsive-slider-gallery');  // put the tags column before it
+				if ($key == 'date') {
+					$new['responsive_slider_shortcode'] = __('Shortcode', 'responsive-slider-gallery');
 				}
 				$new[$key] = $value;
 			}
@@ -172,21 +163,9 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 		{
 			switch ($column) {
 				case 'responsive_slider_shortcode':
-					echo "<input type='text' class='button button-primary' id='responsive-slider-shortcode-" . esc_attr($post_id) . "' value='[responsive-slider id=" . esc_attr($post_id) . "]' style='font-weight:bold; background-color:#32373C; color:#FFFFFF; text-align:center;' />";
-					echo "<input type='button' class='button button-primary' onclick='return RESSLIDERCopyShortcode" . esc_attr($post_id) . "();' readonly value='Copy' style='margin-left:4px;' />";
-					echo "<span id='copy-msg-" . esc_attr($post_id) . "' class='button button-primary' style='display:none; background-color:#32CD32; color:#FFFFFF; margin-left:4px; border-radius: 4px;'>copied</span>";
-					echo '<script>
-						function RESSLIDERCopyShortcode' . esc_attr($post_id) . "() {
-							var copyText = document.getElementById('responsive-slider-shortcode-" . esc_attr($post_id) . "');
-							copyText.select();
-							document.execCommand('copy');
-							
-							//fade in and out copied message
-							jQuery('#copy-msg-" . esc_attr($post_id) . "').fadeIn('1000', 'linear');
-							jQuery('#copy-msg-" . esc_attr($post_id) . "').fadeOut(2500,'swing');
-						}
-						</script>
-					";
+					echo "<input type='text' id='responsive-slider-shortcode-" . esc_attr($post_id) . "' value='[responsive-slider id=" . esc_attr($post_id) . "]' style='font-weight:bold; background-color:#32373C; color:#FFFFFF; text-align:center;' readonly />";
+					echo "<input type='button' class='button button-primary rsg-list-copy-btn' data-post-id='" . esc_attr($post_id) . "' value='" . esc_attr__('Copy', 'responsive-slider-gallery') . "' style='margin-left:4px;' />";
+					echo "<span id='copy-msg-" . esc_attr($post_id) . "' class='button button-primary' style='display:none; background-color:#32CD32; color:#FFFFFF; margin-left:4px; border-radius: 4px;'>" . esc_html__('copied', 'responsive-slider-gallery') . "</span>";
 					break;
 			}
 		}
@@ -202,16 +181,6 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 			load_plugin_textdomain('responsive-slider-gallery', false, dirname(plugin_basename(__FILE__)) . '/languages');
 		}
 
-		/**
-		 * Adds the Gallery menu item
-		 *
-		 * @access    private
-		 * @return    void
-		 */
-		public function _rsgallery_menu()
-		{
-			$theme_menu = add_submenu_page('edit.php?post_type=' . RSG_PLUGIN_SLUG, __('Our Theme', 'responsive-slider-gallery'), __('Our Theme', 'responsive-slider-gallery'), 'administrator', 'sr-theme-page', array($this, '_rs_theme_page'));
-		}
 
 		/**
 		 * Responsive Slider Gallery Custom Post
@@ -287,7 +256,7 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 				<?php esc_html_e('Copy & Embed shotcode into any Page/ Post / Text Widget to display gallery.', 'responsive-slider-gallery'); ?>
 			</p>
 			</p>
-			<span onclick="copyToClipboard('#RSGcopyshortcode')" class="rsg-copy dashicons dashicons-clipboard"></span>
+			<span class="rsg-copy-metabox dashicons dashicons-clipboard"></span>
 			<style>
 				.rsg-copy {
 					position: absolute;
@@ -303,15 +272,6 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 			</style>
 			<script>
 				jQuery("#rsg-copy-code").hide();
-				function copyToClipboard(element) {
-					var $temp = jQuery("<input>");
-					jQuery("body").append($temp);
-					$temp.val(jQuery(element).val()).select();
-					document.execCommand("copy");
-					$temp.remove();
-					jQuery("#RSGcopyshortcode").select();
-					jQuery("#rsg-copy-code").fadeIn();
-				}
 			</script>
 			<?php
 		}
@@ -320,7 +280,9 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 		{
 			wp_enqueue_script('media-upload');
 			wp_enqueue_script('awl-uploader-js', RSG_PLUGIN_URL . 'js/awl-uploader.js', array('jquery'));
+			wp_enqueue_script('rsg-admin-js', RSG_PLUGIN_URL . 'js/rsg-admin.js', array('jquery'), RSG_PLUGIN_VER, true);
 			wp_enqueue_style('awl-uploader-css', RSG_PLUGIN_URL . 'css/awl-uploader.css');
+			wp_enqueue_style('rsg-admin-css', RSG_PLUGIN_URL . 'css/rsg-admin-clean.css', array(), RSG_PLUGIN_VER);
 			wp_enqueue_media();
 			?>
 
@@ -368,10 +330,26 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 			}
 		}
 
+		public function _ajax_batch_slides()
+		{
+			if (current_user_can('manage_options')) {
+				if (!isset($_POST['rsg_add_images_nonce']) || !wp_verify_nonce($_POST['rsg_add_images_nonce'], 'rsg_add_images')) {
+					wp_send_json_error('Sorry, your nonce did not verify.');
+					exit;
+				} else {
+					$slide_ids = isset($_POST['slideIds']) ? (array) $_POST['slideIds'] : array();
+					foreach ($slide_ids as $id) {
+						$this->_rsg_ajax_callback_function(absint($id));
+					}
+					die;
+				}
+			}
+		}
+
 		public function _save_settings($post_id)
 		{
 			if (isset($_POST['rsg_save_nonce'])) {
-				if (isset($_POST['rsg_save_nonce']) || wp_verify_nonce($_POST['rsg_save_nonce'], 'save_settings')) {
+				if (wp_verify_nonce($_POST['rsg_save_nonce'], 'save_settings')) {
 
 					$width = sanitize_text_field($_POST['width']);
 					$height = sanitize_text_field($_POST['height']);
@@ -386,21 +364,25 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 					$navarrow = sanitize_text_field($_POST['nav-arrow']);
 					$touchslide = sanitize_text_field($_POST['touch-slide']);
 					$spinner = sanitize_text_field($_POST['spinner']);
-					$i = 0;
+
 					$image_ids = array();
 					$image_titles = array();
-					$image_ids_val = isset($_POST['slide-ids']) ? (array) $_POST['slide-ids'] : array();
-					$image_ids_val = array_map('sanitize_text_field', $image_ids_val);
+					$image_ids_raw = isset($_POST['slide-ids']) ? (array) $_POST['slide-ids'] : array();
+					$image_titles_raw = isset($_POST['slide-title']) ? (array) $_POST['slide-title'] : array();
 
-					foreach ($image_ids_val as $image_id) {
-						$image_ids[] = sanitize_text_field($_POST['slide-ids'][$i]);
-						$image_titles[] = sanitize_text_field($_POST['slide-title'][$i]);
+					foreach ($image_ids_raw as $i => $image_id) {
+						$sanitized_id = absint($image_id);
+						$sanitized_title = isset($image_titles_raw[$i]) ? sanitize_text_field($image_titles_raw[$i]) : '';
+
+						$image_ids[] = $sanitized_id;
+						$image_titles[] = $sanitized_title;
+
+						// Update image post title
 						$single_image_update = array(
-							'ID' => $image_id,
-							'post_title' => $image_titles[$i],
+							'ID' => $sanitized_id,
+							'post_title' => $sanitized_title,
 						);
 						wp_update_post($single_image_update);
-						$i++;
 					}
 
 					$allslidesetting = array(
@@ -425,7 +407,7 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 				}
 			}
 
-		}//end _save_settings()
+		}
 
 		/**
 		 * Responsive Slider Gallery Docs Page
@@ -436,18 +418,18 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 		 */
 		public function _rsgallery_featured_plugin_page()
 		{
-			require_once 'featured-plugins/featured-plugins.php';
+			// Unused
 		}
 
 		public function _rs_upgrade_plugin_page()
 		{
-			require_once 'buy-responsive-slider-premium.php';
+			// Unused
 		}
 
 		// theme page
 		public function _rs_theme_page()
 		{
-			require_once 'our-theme/awp-theme.php';
+			// Unused
 		}
 
 	} // end of class
@@ -463,29 +445,6 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 	}
 	add_action('wp_enqueue_scripts', 'awplife_rsg_register_scripts');
 
-	// Plugin Recommend
-	add_action('tgmpa_register', 'rsg_txt_dm_plugin_recommend');
-	function rsg_txt_dm_plugin_recommend()
-	{
-		$plugins = array(
-			array(
-				'name' => 'Weather Effect',
-				'slug' => 'weather-effect',
-				'required' => false,
-			),
-			array(
-				'name' => 'Slider – Image Video Link Carousal Slideshow',
-				'slug' => 'media-slider',
-				'required' => false,
-			),
-			array(
-				'name' => 'Modal Popup Box',
-				'slug' => 'modal-popup-box',
-				'required' => false,
-			),
-		);
-		tgmpa($plugins);
-	}
 
 
 	/**
@@ -495,6 +454,5 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 	 */
 	$rs_gallery_object = new Responsive_Slider_Gallery();
 	require_once 'shortcode.php';
-	require_once 'class-tgm-plugin-activation.php';
 } // end of if class exists
 ?>

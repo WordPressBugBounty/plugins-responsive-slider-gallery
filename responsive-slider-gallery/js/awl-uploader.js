@@ -6,8 +6,21 @@ jQuery(function(jQuery) {
         init: function() {
             this.ul = jQuery('.sbox');
             this.ul.sortable({
-                placeholder: '',
-				revert: true,
+                placeholder: 'ui-sortable-placeholder',
+                forcePlaceholderSize: true,
+                revert: false, // Disable revert to prevent the "jump to right" effect on drop
+                opacity: 0.8,
+                tolerance: 'intersect', // Better for grid-based sorting
+                cursor: 'grabbing',
+                start: function(event, ui) {
+                    // Match placeholder size exactly to the dragging item
+                    ui.placeholder.height(ui.item.outerHeight());
+                    ui.placeholder.width(ui.item.outerWidth());
+                },
+                change: function(event, ui) {
+                    // Ensure the placeholder maintains height in CSS Grid
+                    ui.placeholder.height(ui.item.outerHeight());
+                }
             });			
 			
             /**
@@ -25,10 +38,17 @@ jQuery(function(jQuery) {
                 });
 
                 file_frame.on('select', function() {
-                    var images = file_frame.state().get('selection').toJSON(),
-                            length = images.length;
-                    for (var i = 0; i < length; i++) {
-                        awlslider.get_thumbnail(images[i]['id'], '', rsg_add_images_nonce);
+                    var selection = file_frame.state().get('selection');
+                    var ids = [];
+                    selection.map( function( attachment ) {
+                        attachment = attachment.toJSON();
+                        if (attachment.id) {
+                            ids.push(attachment.id);
+                        }
+                    });
+
+                    if (ids.length > 0) {
+                        awlslider.batch_thumbnails(ids, rsg_add_images_nonce);
                     }
                 });
                 file_frame.open();
@@ -39,7 +59,7 @@ jQuery(function(jQuery) {
 			 */
             this.ul.on('click', '#remove-slide', function() {
                 if (confirm('Do you want to delete this slide?')) {
-                    jQuery(this).parent().parent().fadeOut(700, function() {
+                    jQuery(this).closest('.slide').fadeOut(400, function() {
                         jQuery(this).remove();
                     });
                 }
@@ -57,17 +77,14 @@ jQuery(function(jQuery) {
             });
            
         },
-        get_thumbnail: function(id, cb, rsg_add_images_nonce) {
-            cb = cb || function() {
-            };
+        batch_thumbnails: function(ids, rsg_add_images_nonce) {
             var data = {
-                action: 'slide',
-                slideId: id,
+                action: 'batch_slides',
+                slideIds: ids,
 				rsg_add_images_nonce: rsg_add_images_nonce,
             };
             jQuery.post(ajaxurl, data, function(response) {
                 awlslider.ul.append(response);
-                cb();
             });
         }
     };

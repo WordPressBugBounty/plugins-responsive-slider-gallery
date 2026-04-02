@@ -1,35 +1,28 @@
 <?php
-// Clean Admin CSS - No conflicts
-wp_enqueue_style('rsg-admin-clean-css', RSG_PLUGIN_URL . 'css/rsg-admin-clean.css', array(), '2.0.0');
-
-// Font Awesome for icons
-wp_enqueue_style('awl-font-awesome-css', RSG_PLUGIN_URL . 'css/font-awesome.css');
-
-// jQuery
-wp_enqueue_script('jquery');
+// Settings for Responsive Slider Gallery
 ?>
 
 <div class="rsg-settings-dashboard">
 	<div class="rsg-modern-container">
 		<!-- Modern Tab Navigation -->
 		<div class="rsg-tab-navigation">
-			<button class="rsg-tab-btn active" data-tab="tab-images">
+			<button type="button" class="rsg-tab-btn active" data-tab="tab-images">
 				<span class="dashicons dashicons-images-alt2"></span>
 				<?php esc_html_e('Add Images', 'responsive-slider-gallery'); ?>
 			</button>
-			<button class="rsg-tab-btn" data-tab="tab-settings">
+			<button type="button" class="rsg-tab-btn" data-tab="tab-settings">
 				<span class="dashicons dashicons-admin-settings"></span>
 				<?php esc_html_e('Settings', 'responsive-slider-gallery'); ?>
 			</button>
-			<button class="rsg-tab-btn" data-tab="tab-effects">
+			<button type="button" class="rsg-tab-btn" data-tab="tab-effects">
 				<span class="dashicons dashicons-admin-appearance"></span>
 				<?php esc_html_e('Effects', 'responsive-slider-gallery'); ?>
 			</button>
-			<button class="rsg-tab-btn" data-tab="tab-navigation">
+			<button type="button" class="rsg-tab-btn" data-tab="tab-navigation">
 				<span class="dashicons dashicons-arrow-left-alt2"></span>
 				<?php esc_html_e('Navigation', 'responsive-slider-gallery'); ?>
 			</button>
-			<button class="rsg-tab-btn rsg-tab-pro" data-tab="tab-upgrade">
+			<button type="button" class="rsg-tab-btn rsg-tab-pro" data-tab="tab-upgrade">
 				<span class="dashicons dashicons-star-filled"></span>
 				<?php esc_html_e('Upgrade', 'responsive-slider-gallery'); ?>
 			</button>
@@ -47,7 +40,7 @@ wp_enqueue_script('jquery');
 					<div class="rsg-actions">
 						<input type="button" id="add-new-slider" class="button button-large rsg-btn-primary"
 							value="<?php esc_html_e('Add Images', 'responsive-slider-gallery'); ?>">
-						<button class="button button-large rsg-btn-danger" id="remove-all-slides"
+						<button type="button" class="button button-large rsg-btn-danger" id="remove-all-slides"
 							name="remove-all-slides"><?php esc_html_e('Delete All Slides', 'responsive-slider-gallery'); ?></button>
 					</div>
 					<ul id="remove-slides" class="sbox rsg-gallery-grid">
@@ -349,54 +342,139 @@ wp_enqueue_script('jquery');
 						</div>
 					</div>
 
-					<!-- Features Grid -->
-					<div class="rsg-features-grid">
+					<!-- 6 Main Features Grid -->
+					<div class="rsg-upgrade-grid">
 						<div class="rsg-feature-card">
 							<div class="rsg-feature-icon">
-								<span class="dashicons dashicons-images-alt2"></span>
+								<span class="dashicons dashicons-video-alt3"></span>
 							</div>
-							<h3><?php esc_html_e('Advanced Layouts', 'responsive-slider-gallery'); ?></h3>
-							<p><?php esc_html_e('Multiple slider layouts and styles to choose from', 'responsive-slider-gallery'); ?></p>
+							<div class="rsg-feature-content">
+								<h3><?php esc_html_e('Video Slides', 'responsive-slider-gallery'); ?></h3>
+								<p><?php esc_html_e('Add YouTube and Vimeo videos directly to your sliders.', 'responsive-slider-gallery'); ?></p>
+							</div>
 						</div>
 
 						<div class="rsg-feature-card">
 							<div class="rsg-feature-icon">
 								<span class="dashicons dashicons-admin-appearance"></span>
 							</div>
-							<h3><?php esc_html_e('Slide Transition Effect', 'responsive-slider-gallery'); ?></h3>
-							<p><?php esc_html_e('3+ transition effects and animations', 'responsive-slider-gallery'); ?></p>
+							<div class="rsg-feature-content">
+								<h3><?php esc_html_e('Pro Transitions', 'responsive-slider-gallery'); ?></h3>
+								<p><?php esc_html_e('3+ premium effects including Fade, Zoom, and Slide.', 'responsive-slider-gallery'); ?></p>
+							</div>
 						</div>
 
 						<div class="rsg-feature-card">
 							<div class="rsg-feature-icon">
-								<span class="dashicons dashicons-smartphone"></span>
+								<span class="dashicons dashicons-move"></span>
 							</div>
-							<h3><?php esc_html_e('Fully Responsive', 'responsive-slider-gallery'); ?></h3>
-							<p><?php esc_html_e('Perfect display on all devices and screen sizes', 'responsive-slider-gallery'); ?></p>
+							<div class="rsg-feature-content">
+								<h3><?php esc_html_e('Custom Navigation', 'responsive-slider-gallery'); ?></h3>
+								<p><?php esc_html_e('3+ unique arrow and dot pagination styles.', 'responsive-slider-gallery'); ?></p>
+							</div>
 						</div>
 
 						<div class="rsg-feature-card">
 							<div class="rsg-feature-icon">
-								<span class="dashicons dashicons-admin-customizer"></span>
+								<span class="dashicons dashicons-media-text"></span>
 							</div>
-							<h3><?php esc_html_e('Full Customization', 'responsive-slider-gallery'); ?></h3>
-							<p><?php esc_html_e('Complete control over colors, fonts, and spacing', 'responsive-slider-gallery'); ?></p>
+							<div class="rsg-feature-content">
+								<h3><?php esc_html_e('Premium Overlays', 'responsive-slider-gallery'); ?></h3>
+								<p><?php esc_html_e('4 professional text and title designs for your slides.', 'responsive-slider-gallery'); ?></p>
+							</div>
 						</div>
 
 						<div class="rsg-feature-card">
 							<div class="rsg-feature-icon">
-								<span class="dashicons dashicons-format-video"></span>
+								<span class="dashicons dashicons-fullscreen-alt"></span>
 							</div>
-							<h3><?php esc_html_e('Video Support', 'responsive-slider-gallery'); ?></h3>
-							<p><?php esc_html_e('Add YouTube and Vimeo videos to your sliders', 'responsive-slider-gallery'); ?></p>
+							<div class="rsg-feature-content">
+								<h3><?php esc_html_e('Fullscreen Mastery', 'responsive-slider-gallery'); ?></h3>
+								<p><?php esc_html_e('2 specialized full-screen display modes for maximum impact.', 'responsive-slider-gallery'); ?></p>
+							</div>
 						</div>
 
 						<div class="rsg-feature-card">
 							<div class="rsg-feature-icon">
-								<span class="dashicons dashicons-sos"></span>
+								<span class="dashicons dashicons-admin-settings"></span>
 							</div>
-							<h3><?php esc_html_e('Priority Support', 'responsive-slider-gallery'); ?></h3>
-							<p><?php esc_html_e('Get fast and dedicated support from our team', 'responsive-slider-gallery'); ?></p>
+							<div class="rsg-feature-content">
+								<h3><?php esc_html_e('Granular Control', 'responsive-slider-gallery'); ?></h3>
+								<p><?php esc_html_e('Per-slide customization for links, captions, and behavior.', 'responsive-slider-gallery'); ?></p>
+							</div>
+						</div>
+					</div>
+
+					<!-- Comparison Table -->
+					<div class="rsg-comparison-section">
+						<h2 class="rsg-section-title"><?php esc_html_e('Free vs Premium Comparison', 'responsive-slider-gallery'); ?></h2>
+						<div class="rsg-comparison-table-container">
+							<table class="rsg-comparison-table">
+								<thead>
+									<tr>
+										<th><?php esc_html_e('Features', 'responsive-slider-gallery'); ?></th>
+										<th><?php esc_html_e('Free', 'responsive-slider-gallery'); ?></th>
+										<th><?php esc_html_e('Premium', 'responsive-slider-gallery'); ?></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><?php esc_html_e('Unlimited Slides', 'responsive-slider-gallery'); ?></td>
+										<td><span class="dashicons dashicons-yes rsg-check-icon"></span></td>
+										<td><span class="dashicons dashicons-yes rsg-check-icon"></span></td>
+									</tr>
+									<tr>
+										<td><?php esc_html_e('Responsive Design', 'responsive-slider-gallery'); ?></td>
+										<td><span class="dashicons dashicons-yes rsg-check-icon"></span></td>
+										<td><span class="dashicons dashicons-yes rsg-check-icon"></span></td>
+									</tr>
+									<tr>
+										<td><?php esc_html_e('Batch Upload', 'responsive-slider-gallery'); ?></td>
+										<td><span class="dashicons dashicons-yes rsg-check-icon"></span></td>
+										<td><span class="dashicons dashicons-yes rsg-check-icon"></span></td>
+									</tr>
+									<tr>
+										<td><?php esc_html_e('Slide Transitions', 'responsive-slider-gallery'); ?></td>
+										<td><?php esc_html_e('Slide Only', 'responsive-slider-gallery'); ?></td>
+										<td><?php esc_html_e('Fade, Zoom, Slide & more', 'responsive-slider-gallery'); ?></td>
+									</tr>
+									<tr>
+										<td><?php esc_html_e('Navigation Styles', 'responsive-slider-gallery'); ?></td>
+										<td><?php esc_html_e('Basic', 'responsive-slider-gallery'); ?></td>
+										<td><?php esc_html_e('3+ Modern Designs', 'responsive-slider-gallery'); ?></td>
+									</tr>
+									<tr>
+										<td><?php esc_html_e('Text Overlays', 'responsive-slider-gallery'); ?></td>
+										<td><?php esc_html_e('Standard', 'responsive-slider-gallery'); ?></td>
+										<td><?php esc_html_e('4 Pro Layouts', 'responsive-slider-gallery'); ?></td>
+									</tr>
+									<tr>
+										<td><?php esc_html_e('Video Slides (YouTube/Vimeo)', 'responsive-slider-gallery'); ?></td>
+										<td><span class="dashicons dashicons-no rsg-cross-icon"></span></td>
+										<td><strong><span class="dashicons dashicons-yes rsg-check-icon"></span></strong></td>
+									</tr>
+									<tr>
+										<td><?php esc_html_e('Fullscreen Display Modes', 'responsive-slider-gallery'); ?></td>
+										<td><span class="dashicons dashicons-no rsg-cross-icon"></span></td>
+										<td><strong><span class="dashicons dashicons-yes rsg-check-icon"></span></strong></td>
+									</tr>
+									<tr>
+										<td><?php esc_html_e('Import / Export', 'responsive-slider-gallery'); ?></td>
+										<td><span class="dashicons dashicons-no rsg-cross-icon"></span></td>
+										<td><strong><span class="dashicons dashicons-yes rsg-check-icon"></span></strong></td>
+									</tr>
+									<tr>
+										<td><?php esc_html_e('Per-slide Settings', 'responsive-slider-gallery'); ?></td>
+										<td><span class="dashicons dashicons-no rsg-cross-icon"></span></td>
+										<td><strong><span class="dashicons dashicons-yes rsg-check-icon"></span></strong></td>
+									</tr>
+									<tr>
+										<td><?php esc_html_e('Priority Support', 'responsive-slider-gallery'); ?></td>
+										<td><span class="dashicons dashicons-no rsg-cross-icon"></span></td>
+										<td><strong><span class="dashicons dashicons-yes rsg-check-icon"></span></strong></td>
+									</tr>
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>
@@ -406,78 +484,9 @@ wp_enqueue_script('jquery');
 </div>
 
 <!-- Return to Top -->
-<a href="javascript:" id="return-to-top"><i class="fa fa-chevron-up"></i></a>
+<a href="javascript:" id="rsg-return-to-top" class="rsg-return-to-top">
+	<span class="dashicons dashicons-arrow-up-alt2"></span>
+</a>
 <?php
-// syntax: wp_nonce_field( 'name_of_my_action', 'name_of_nonce_field' );
 wp_nonce_field('save_settings', 'rsg_save_nonce');
 ?>
-
-<script>
-	// ===== Scroll to Top ==== 
-	jQuery(window).scroll(function () {
-		if (jQuery(this).scrollTop() >= 50) {        // If page is scrolled more than 50px
-			jQuery('#return-to-top').fadeIn(200);    // Fade in the arrow
-		} else {
-			jQuery('#return-to-top').fadeOut(200);   // Else fade out the arrow
-		}
-	});
-	jQuery('#return-to-top').click(function () {      // When arrow is clicked
-		jQuery('body,html').animate({
-			scrollTop: 0                       // Scroll to top of body
-		}, 500);
-	});
-
-	// Show Hide Settings
-	jQuery(document).ready(function () {
-		// Navigation settings
-		var nav_style = jQuery('input[name="nav-style"]:checked').val();
-		if (nav_style == "dots") {
-			jQuery('.dots_hs').show();
-		} else {
-			jQuery('.dots_hs').hide();
-		}
-
-		// On change navigation setting
-		jQuery('input[name="nav-style"]').change(function () {
-			var nav_style = jQuery('input[name="nav-style"]:checked').val();
-			if (nav_style == "dots") {
-				jQuery('.dots_hs').show();
-			} else {
-				jQuery('.dots_hs').hide();
-			}
-		});
-	});
-
-
-
-	// start pulse on page load
-	function pulseEff() {
-		jQuery('#shortcode').fadeOut(600).fadeIn(600);
-	};
-	var Interval;
-	Interval = setInterval(pulseEff, 1500);
-
-	// stop pulse
-	function pulseOff() {
-		clearInterval(Interval);
-	}
-	// start pulse
-	function pulseStart() {
-		Interval = setInterval(pulseEff, 1500);
-	}
-	// Modern Tab Switching
-	jQuery('.rsg-tab-btn').on('click', function (e) {
-		e.preventDefault();
-
-		// Remove active class from all tabs and buttons
-		jQuery('.rsg-tab-btn').removeClass('active');
-		jQuery('.rsg-tab-pane').removeClass('active');
-
-		// Add active class to clicked button
-		jQuery(this).addClass('active');
-
-		// Show corresponding tab content
-		var tabId = jQuery(this).data('tab');
-		jQuery('#' + tabId).addClass('active');
-	});
-</script>
