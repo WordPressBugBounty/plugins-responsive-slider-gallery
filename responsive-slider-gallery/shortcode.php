@@ -1,4 +1,7 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
 /**
  * Responsive Slider Shortcode
  *
@@ -25,6 +28,15 @@ function responsive_slider_shortcode($atts)
 
     wp_enqueue_script('awl-fotorama-js');
     wp_enqueue_style('awl-fotorama-css');
+    wp_add_inline_script('awl-fotorama-js', 'jQuery(function ($) {
+        $(".responsive-image-silder").fotorama({
+            spinner: {
+                lines: 13,
+                color: "rgba(0, 0, 0, .75)",
+                className: "fotorama",
+            }
+        });
+    });');
 
     ob_start();
 
@@ -39,7 +51,13 @@ function responsive_slider_shortcode($atts)
             $slider_query->the_post();
             $current_post_id = get_the_ID();
             $meta_value = get_post_meta($current_post_id, 'awl_slider_settings_' . $current_post_id, true);
-            $allslidesetting = unserialize(base64_decode($meta_value));
+            if (is_array($meta_value)) {
+                $allslidesetting = $meta_value;
+            } elseif (!empty($meta_value) && is_string($meta_value)) {
+                $allslidesetting = unserialize(base64_decode($meta_value));
+            } else {
+                $allslidesetting = array();
+            }
 
             // Default settings
             $defaults = array(
@@ -97,18 +115,7 @@ function responsive_slider_shortcode($atts)
                 ?>
             </div>
             
-            <!-- Initialization Script - Inside the container to ensure it's returned by the shortcode -->
-            <script>
-                jQuery(function ($) {
-                    $('.responsive-image-silder').fotorama({
-                        spinner: {
-                            lines: 13,
-                            color: 'rgba(0, 0, 0, .75)',
-                            className: 'fotorama',
-                        }
-                    });
-                });
-            </script>
+            <!-- Initialization handled JIT via wp_add_inline_script -->
             <?php
         endwhile;
         wp_reset_postdata();

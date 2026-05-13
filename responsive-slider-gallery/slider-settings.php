@@ -1,4 +1,7 @@
 <?php
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly
+}
 // Settings for Responsive Slider Gallery
 ?>
 
@@ -39,16 +42,23 @@
 				<div id="slider-gallery">
 					<div class="rsg-actions">
 						<input type="button" id="add-new-slider" class="button button-large rsg-btn-primary"
-							value="<?php esc_html_e('Add Images', 'responsive-slider-gallery'); ?>">
+							value="<?php esc_attr_e('Add Images', 'responsive-slider-gallery'); ?>">
 						<button type="button" class="button button-large rsg-btn-danger" id="remove-all-slides"
 							name="remove-all-slides"><?php esc_html_e('Delete All Slides', 'responsive-slider-gallery'); ?></button>
 					</div>
 					<ul id="remove-slides" class="sbox rsg-gallery-grid">
 						<?php
-						$allslidesetting = unserialize(base64_decode(get_post_meta($post->ID, 'awl_slider_settings_' . $post->ID, true)));
+						$meta_raw = get_post_meta($post->ID, 'awl_slider_settings_' . $post->ID, true);
+						if (is_array($meta_raw)) {
+							$allslidesetting = $meta_raw;
+						} elseif (!empty($meta_raw) && is_string($meta_raw)) {
+							$allslidesetting = unserialize(base64_decode($meta_raw));
+						} else {
+							$allslidesetting = array();
+						}
 						if (isset($allslidesetting['slide-ids'])) {
 							foreach ($allslidesetting['slide-ids'] as $id) {
-								$thumbnail = wp_get_attachment_image_src($id, 'large', true);
+								$thumbnail = wp_get_attachment_image_src($id, 'medium', true);
 								$attachment = get_post($id);
 								?>
 								<li class="slide rsg-gallery-item">
@@ -62,7 +72,7 @@
 										value="<?php echo esc_attr($id); ?>" />
 									<!-- Slide Title-->
 									<input type="text" class="rsg-slide-title" name="slide-title[]" id="slide-title[]"
-										placeholder="<?php _e('Slide Title', 'responsive-slider-gallery'); ?>" readonly
+										placeholder="<?php esc_attr_e('Slide Title', 'responsive-slider-gallery'); ?>" readonly
 										value="<?php echo esc_attr(get_the_title($id)); ?>">
 								</li>
 								<?php
@@ -488,5 +498,5 @@
 	<span class="dashicons dashicons-arrow-up-alt2"></span>
 </a>
 <?php
-wp_nonce_field('save_settings', 'rsg_save_nonce');
+wp_nonce_field('rsg_save_settings', 'rsg_save_nonce');
 ?>

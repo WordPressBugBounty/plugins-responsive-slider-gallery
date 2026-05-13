@@ -7,7 +7,7 @@
  * Plugin Name:       Responsive Slider Gallery
  * Plugin URI:        https://awplife.com/wordpress-plugins/responsive-slider-gallery-premium/
  * Description:       A Responsive Simple Beautiful Easy Powerful CSS & JS Based WordPress Image Slider Gallery Plugin [standard]
- * Version:           1.5.3
+ * Version:           1.5.4
  * Requires at least: 5.4
  * Requires PHP:      7.2
  * Author:            A WP Life
@@ -56,12 +56,8 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 			/**
 			 * Plugin Version
 			 */
-			define('RSG_PLUGIN_VER', '1.5.3');
+			define('RSG_PLUGIN_VER', '1.5.4');
 
-			/**
-			 * Plugin Text Domain
-			 */
-			define('rsg_txt_dm', 'responsive-slider-gallery');
 
 			/**
 			 * Plugin Name
@@ -83,12 +79,7 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 			 */
 			define('RSG_PLUGIN_URL', plugin_dir_url(__FILE__));
 
-			/**
-			 * Create a key for the .htaccess secure download link.
-			 *
-			 * @uses    NONCE_KEY     Defined in the WP root config.php
-			 */
-			define('EWPT_SECURE_KEY', md5(NONCE_KEY));
+
 
 		} // end of constructor function
 
@@ -102,10 +93,6 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 		 */
 		protected function _hooks()
 		{
-			/**
-			 * Load text domain
-			 */
-			add_action('init', array($this, '_load_textdomain'));
 
 			/**
 			 * Create Responsive Slider Gallery Custom Post
@@ -117,15 +104,17 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 			 */
 			add_action('add_meta_boxes', array($this, '_admin_add_meta_box'));
 
-			add_action('wp_ajax_slide', array(&$this, '_ajax_slide'));
-			add_action('wp_ajax_batch_slides', array(&$this, '_ajax_batch_slides'));
+			/**
+			 * Add admin documentation sub-menu
+			 */
+			add_action('admin_menu', array($this, '_rsg_admin_menu_pages'));
+
+			add_action('wp_ajax_rsg_slide', array(&$this, '_ajax_slide'));
+			add_action('wp_ajax_rsg_batch_slides', array(&$this, '_ajax_batch_slides'));
 
 			add_action('save_post', array(&$this, '_save_settings'));
 
-			/**
-			 * Shortcode Compatibility in Text Widgets
-			 */
-			add_filter('widget_text', 'do_shortcode');
+
 
 			// add pfg cpt shortcode column - manage_{$post_type}_posts_columns
 			add_filter('manage_responsive_slider_posts_columns', array(&$this, 'set_responsive_slider_shortcode_column_name'));
@@ -133,15 +122,44 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 			// add pfg cpt shortcode column data - manage_{$post_type}_posts_custom_column
 			add_action('manage_responsive_slider_posts_custom_column', array(&$this, 'custom_responsive_slider_shodrcode_data'), 10, 2);
 
-			add_action('wp_enqueue_scripts', array(&$this, 'responsive_enqueue_scripts_in_header'));
+			add_action('admin_enqueue_scripts', array(&$this, 'rsg_admin_enqueue_scripts'));
 
 		} // end of hook function
 
-		public function responsive_enqueue_scripts_in_header()
+		public function rsg_admin_enqueue_scripts($hook)
 		{
-			wp_enqueue_script('jquery');
-			if (is_admin()) {
+			global $post_type;
+			$current_page = isset($_GET['page']) ? sanitize_text_field($_GET['page']) : '';
+			
+			// Context A: Custom Post Type Edit Screens
+			if ('responsive_slider' === $post_type) {
+				wp_enqueue_media();
+				wp_enqueue_script('media-upload');
+				wp_enqueue_script('awl-uploader-js', RSG_PLUGIN_URL . 'js/awl-uploader.js', array('jquery'));
 				wp_enqueue_script('rsg-admin-js', RSG_PLUGIN_URL . 'js/rsg-admin.js', array('jquery'), RSG_PLUGIN_VER, true);
+				
+				wp_enqueue_style('awl-uploader-css', RSG_PLUGIN_URL . 'css/awl-uploader.css');
+				wp_enqueue_style('rsg-admin-css', RSG_PLUGIN_URL . 'css/rsg-admin-clean.css', array(), RSG_PLUGIN_VER);
+
+				wp_add_inline_style('rsg-admin-css', '
+					.rsg-copy {
+						position: absolute;
+						top: 9px;
+						right: 30px;
+						font-size: 30px;
+						cursor: pointer;
+					}
+					.ui-sortable-handle>span {
+						font-size: 16px !important;
+					}
+				');
+
+				wp_add_inline_script('rsg-admin-js', 'jQuery(function($) { $("#rsg-copy-code").hide(); });');
+			}
+
+			// Context B: Custom Dynamic Page Contexts (Plugins & Themes)
+			if (in_array($current_page, array('rsg_our_plugins', 'rsg_our_themes'))) {
+				wp_enqueue_style('rsg-our-plugins-common-style', RSG_PLUGIN_URL . 'css/our-plugins-style.css', array(), RSG_PLUGIN_VER);
 			}
 		}
 
@@ -170,16 +188,6 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 			}
 		}
 
-		/**
-		 * Loads the text domain.
-		 *
-		 * @return    void
-		 * @access    private
-		 */
-		public function _load_textdomain()
-		{
-			load_plugin_textdomain('responsive-slider-gallery', false, dirname(plugin_basename(__FILE__)) . '/languages');
-		}
 
 
 		/**
@@ -240,8 +248,8 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 		public function _admin_add_meta_box()
 		{
 			// Syntax: add_meta_box( $id, $title, $callback, $screen, $context, $priority, $callback_args );
-			add_meta_box('1', __('Copy Responsive Slider Shortcode', 'responsive-slider-gallery'), array(&$this, '_rsg_shortcode_left_metabox'), 'responsive_slider', 'side', 'default');
-			add_meta_box('', __('Add Image Slides', 'responsive-slider-gallery'), array(&$this, 'upload_multiple_images'), 'responsive_slider', 'normal', 'default');
+			add_meta_box('rsg_shortcode_copy_metabox', __('Copy Responsive Slider Shortcode', 'responsive-slider-gallery'), array(&$this, '_rsg_shortcode_left_metabox'), 'responsive_slider', 'side', 'default');
+			add_meta_box('rsg_add_images_metabox', __('Add Image Slides', 'responsive-slider-gallery'), array(&$this, 'upload_multiple_images'), 'responsive_slider', 'normal', 'default');
 		}
 
 		// image gallery copy shortcode meta box under publish button
@@ -257,33 +265,12 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 			</p>
 			</p>
 			<span class="rsg-copy-metabox dashicons dashicons-clipboard"></span>
-			<style>
-				.rsg-copy {
-					position: absolute;
-					top: 9px;
-					right: 30px;
-					font-size: 30px;
-					cursor: pointer;
-				}
-
-				.ui-sortable-handle>span {
-					font-size: 16px !important;
-				}
-			</style>
-			<script>
-				jQuery("#rsg-copy-code").hide();
-			</script>
+			<!-- Asset hooks loaded safely via admin_enqueue_scripts -->
 			<?php
 		}
 
 		public function upload_multiple_images($post)
 		{
-			wp_enqueue_script('media-upload');
-			wp_enqueue_script('awl-uploader-js', RSG_PLUGIN_URL . 'js/awl-uploader.js', array('jquery'));
-			wp_enqueue_script('rsg-admin-js', RSG_PLUGIN_URL . 'js/rsg-admin.js', array('jquery'), RSG_PLUGIN_VER, true);
-			wp_enqueue_style('awl-uploader-css', RSG_PLUGIN_URL . 'css/awl-uploader.css');
-			wp_enqueue_style('rsg-admin-css', RSG_PLUGIN_URL . 'css/rsg-admin-clean.css', array(), RSG_PLUGIN_VER);
-			wp_enqueue_media();
 			?>
 
 
@@ -291,12 +278,12 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 			<?php wp_nonce_field('rsg_add_images', 'rsg_add_images_nonce'); ?>
 
 			<?php
-			require_once 'slider-settings.php';
+			require_once plugin_dir_path(__FILE__) . 'slider-settings.php';
 		} // end of upload multiple image
 
 		public function _rsg_ajax_callback_function($id)
 		{
-			$thumbnail = wp_get_attachment_image_src($id, 'large', true);
+			$thumbnail = wp_get_attachment_image_src($id, 'medium', true);
 
 			if (!$thumbnail) {
 				return;
@@ -310,7 +297,7 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 				</div>
 				<input type="hidden" id="slide-ids[]" name="slide-ids[]" value="<?php echo esc_attr($id); ?>" />
 				<input type="text" class="rsg-slide-title" name="slide-title[]" id="slide-title[]"
-					placeholder="<?php _e('Slide Title', 'responsive-slider-gallery'); ?>" readonly
+					placeholder="<?php esc_attr_e('Slide Title', 'responsive-slider-gallery'); ?>" readonly
 					value="<?php echo esc_attr(get_the_title($id)); ?>">
 			</li>
 			<?php
@@ -318,9 +305,9 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 
 		public function _ajax_slide()
 		{
-			if (current_user_can('manage_options')) {
+			if (current_user_can('upload_files')) {
 				if (!isset($_POST['rsg_add_images_nonce']) || !wp_verify_nonce($_POST['rsg_add_images_nonce'], 'rsg_add_images')) {
-					wp_send_json_error('Sorry, your nonce did not verify.');
+					wp_send_json_error(__('Sorry, your nonce did not verify.', 'responsive-slider-gallery'));
 					exit;
 				} else {
 					$slide_id = absint($_POST['slideId']);
@@ -332,9 +319,9 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 
 		public function _ajax_batch_slides()
 		{
-			if (current_user_can('manage_options')) {
+			if (current_user_can('upload_files')) {
 				if (!isset($_POST['rsg_add_images_nonce']) || !wp_verify_nonce($_POST['rsg_add_images_nonce'], 'rsg_add_images')) {
-					wp_send_json_error('Sorry, your nonce did not verify.');
+					wp_send_json_error(__('Sorry, your nonce did not verify.', 'responsive-slider-gallery'));
 					exit;
 				} else {
 					$slide_ids = isset($_POST['slideIds']) ? (array) $_POST['slideIds'] : array();
@@ -348,22 +335,32 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 
 		public function _save_settings($post_id)
 		{
-			if (isset($_POST['rsg_save_nonce'])) {
-				if (wp_verify_nonce($_POST['rsg_save_nonce'], 'save_settings')) {
+			// Auto-save protection
+			if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+				return;
+			}
 
-					$width = sanitize_text_field($_POST['width']);
-					$height = sanitize_text_field($_POST['height']);
-					$navstyle = sanitize_text_field($_POST['nav-style']);
-					$navwidth = sanitize_text_field($_POST['nav-width']);
-					$fullscreen = sanitize_text_field($_POST['fullscreen']);
-					$fitslides = sanitize_text_field($_POST['fit-slides']);
-					$transitionduration = sanitize_text_field($_POST['transition-duration']);
-					$slidetext = sanitize_text_field($_POST['slide-text']);
-					$autoplay = sanitize_text_field($_POST['autoplay']);
-					$loop = sanitize_text_field($_POST['loop']);
-					$navarrow = sanitize_text_field($_POST['nav-arrow']);
-					$touchslide = sanitize_text_field($_POST['touch-slide']);
-					$spinner = sanitize_text_field($_POST['spinner']);
+			// Capability authorization guard
+			if (!current_user_can('edit_post', $post_id)) {
+				return;
+			}
+
+			if (isset($_POST['rsg_save_nonce'])) {
+				if (wp_verify_nonce($_POST['rsg_save_nonce'], 'rsg_save_settings')) {
+
+					$width = isset($_POST['width']) ? sanitize_text_field($_POST['width']) : '100%';
+					$height = isset($_POST['height']) ? sanitize_text_field($_POST['height']) : '';
+					$navstyle = isset($_POST['nav-style']) ? sanitize_text_field($_POST['nav-style']) : 'dots';
+					$navwidth = isset($_POST['nav-width']) ? sanitize_text_field($_POST['nav-width']) : '';
+					$fullscreen = isset($_POST['fullscreen']) ? sanitize_text_field($_POST['fullscreen']) : 'true';
+					$fitslides = isset($_POST['fit-slides']) ? sanitize_text_field($_POST['fit-slides']) : 'cover';
+					$transitionduration = isset($_POST['transition-duration']) ? sanitize_text_field($_POST['transition-duration']) : '300';
+					$slidetext = isset($_POST['slide-text']) ? sanitize_text_field($_POST['slide-text']) : 'yes';
+					$autoplay = isset($_POST['autoplay']) ? sanitize_text_field($_POST['autoplay']) : 'yes';
+					$loop = isset($_POST['loop']) ? sanitize_text_field($_POST['loop']) : 'yes';
+					$navarrow = isset($_POST['nav-arrow']) ? sanitize_text_field($_POST['nav-arrow']) : 'show';
+					$touchslide = isset($_POST['touch-slide']) ? sanitize_text_field($_POST['touch-slide']) : 'yes';
+					$spinner = isset($_POST['spinner']) ? sanitize_text_field($_POST['spinner']) : 'spinner1';
 
 					$image_ids = array();
 					$image_titles = array();
@@ -377,12 +374,14 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 						$image_ids[] = $sanitized_id;
 						$image_titles[] = $sanitized_title;
 
-						// Update image post title
-						$single_image_update = array(
-							'ID' => $sanitized_id,
-							'post_title' => $sanitized_title,
-						);
-						wp_update_post($single_image_update);
+						// PERFORMANCE OPTIMIZATION: Only execute update if text has actually changed.
+						if (get_the_title($sanitized_id) !== $sanitized_title) {
+							$single_image_update = array(
+								'ID' => $sanitized_id,
+								'post_title' => $sanitized_title,
+							);
+							wp_update_post($single_image_update);
+						}
 					}
 
 					$allslidesetting = array(
@@ -403,33 +402,62 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 						'spinner' => $spinner,
 					);
 					$awl_slider_shortcode_setting = 'awl_slider_settings_' . $post_id;
-					update_post_meta($post_id, $awl_slider_shortcode_setting, base64_encode(serialize($allslidesetting)));
+					
+					// UPGRADE: Native array format for speed and queryability.
+					update_post_meta($post_id, $awl_slider_shortcode_setting, $allslidesetting);
 				}
 			}
 
 		}
 
 		/**
-		 * Responsive Slider Gallery Docs Page
-		 * Create doc page to help user to setup plugin
-		 *
-		 * @access    private
-		 * @return    void.
+		 * Registers dynamic admin sub-menu routes under slider context
 		 */
+		public function _rsg_admin_menu_pages()
+		{
+			add_submenu_page(
+				'edit.php?post_type=responsive_slider',
+				__('Plugin Docs', 'responsive-slider-gallery'),
+				__('Plugin Docs', 'responsive-slider-gallery'),
+				'manage_options',
+				'rsg_docs_page',
+				array(&$this, '_rsgallery_featured_plugin_page')
+			);
+
+			add_submenu_page(
+				'edit.php?post_type=responsive_slider',
+				__('Our Plugins', 'responsive-slider-gallery'),
+				__('Our Plugins', 'responsive-slider-gallery'),
+				'manage_options',
+				'rsg_our_plugins',
+				array(&$this, '_rs_upgrade_plugin_page')
+			);
+
+			add_submenu_page(
+				'edit.php?post_type=responsive_slider',
+				__('Our Themes', 'responsive-slider-gallery'),
+				__('Our Themes', 'responsive-slider-gallery'),
+				'manage_options',
+				'rsg_our_themes',
+				array(&$this, '_rs_theme_page')
+			);
+		}
+
 		public function _rsgallery_featured_plugin_page()
 		{
-			// Unused
+			// Render standalone dynamic documentation engine file
+			require_once(plugin_dir_path(__FILE__) . 'docs.php');
 		}
 
 		public function _rs_upgrade_plugin_page()
 		{
-			// Unused
+			require_once(plugin_dir_path(__FILE__) . 'our-plugins.php');
 		}
 
 		// theme page
 		public function _rs_theme_page()
 		{
-			// Unused
+			require_once(plugin_dir_path(__FILE__) . 'our-themes.php');
 		}
 
 	} // end of class
@@ -453,6 +481,6 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 	 * @global    object    $rs_gallery_object
 	 */
 	$rs_gallery_object = new Responsive_Slider_Gallery();
-	require_once 'shortcode.php';
+	require_once plugin_dir_path(__FILE__) . 'shortcode.php';
 } // end of if class exists
 ?>

@@ -79,7 +79,7 @@ jQuery(function(jQuery) {
         },
         batch_thumbnails: function(ids, rsg_add_images_nonce) {
             var data = {
-                action: 'batch_slides',
+                action: 'rsg_batch_slides',
                 slideIds: ids,
 				rsg_add_images_nonce: rsg_add_images_nonce,
             };

@@ -1,21 +1,30 @@
-=== Responsive Slider Gallery ===
+=== Responsive Slider Gallery - Responsive Image Photo Slider ===
 Contributors: awordpresslife, razipathhan, hanif0991, muhammadshahid, fkfaisalkhan007, sharikkhan007, zishlife, FARAZFRANK
 Donate link: https://paypal.me/awplife
 Tags: responsive slider, image slider, slideshow, photo slider, slider gallery
-Requires at least: 5.0
+Requires at least: 5.4
 Tested up to: 6.9
-Stable tag: 1.5.3
+Stable tag: 1.5.4
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Build image slideshows with drag-and-drop. A simple responsive slider for posts, pages, and widgets with custom navigation styles.
+Build an image slider with easy drag-and-drop. A simple responsive photo slider for your WordPress website posts and pages.
 
 == Description ==
 
-Responsive Slider Gallery helps you create and manage image slideshows on your WordPress site. Whether you run a portfolio site, a business website, or a personal blog, this responsive slider adapts to any screen size and works smoothly on mobile devices, tablets, and desktops.
+### A Simple Responsive Photo Slider For WordPress
+Responsive Slider Gallery is an easy tool to build a stunning image slideshow. It makes managing your photo assets fast and simple. Your visitors get a beautiful experience on mobile phones, tablets, and desktop computers.
 
-The plugin provides a straightforward way to build an image slider without touching any code. You upload your photos through the familiar WordPress media library, arrange them with drag-and-drop, and publish. The generated shortcode can be placed in posts, pages, or widget areas.
+Setting up an image photo slider takes less than two minutes. You just pick your photos from the WordPress media library. Then drag them into any order you like and click publish. Use a shortcode to place the slider anywhere.
+
+### Features Of This Image Slider
+*   Create a responsive photo slider that fits any screen size.
+*   Arrange your image slide order with smooth drag and drop.
+*   Batch upload multiple photo files directly from your media library.
+*   Place your slideshow anywhere using a flexible shortcode.
+*   Add a photo slider widget into your sidebar or footer area.
+*   Set custom width and height to fit your website design.
 
 **Free Version Demo:** **[Responsive Slider Gallery](https://awplife.com/demo/responsive-slider-gallery-standard/)**
 **Premium Version Demo:** **[Responsive Slider Gallery Premium Demo](https://awplife.com/demo/responsive-slider-gallery-premium/)**
@@ -45,142 +54,91 @@ This slider gallery works across all major browsers including Chrome, Firefox, S
 * [Transition Effects](https://awplife.com/demo/responsive-slider-gallery-premium/slider-transition-style/)
 * [Text On Slides](https://awplife.com/demo/responsive-slider-gallery-premium/slider-with-text-on-slide/)
 
+### Why Choose This Photo Gallery Slideshow?
+This image slider works seamlessly on Chrome, Firefox, Safari, and Microsoft Edge browsers. It is fully compatible with the modern WordPress block editor. It is lightweight and loads your images very quickly.
+
 = Free Version Features =
 
-* Responsive slider design
-* Drag and drop image ordering
-* Batch image upload from media library
-* Shortcode support for pages, posts, and templates
-* Widget slider for sidebar and footer
-* Custom slider width and height
-* Navigation arrows
-* Cross-browser compatibility
-* Full compatibility with WordPress block editor
-* Standard WordPress import and export
+*   Responsive image slider layout.
+*   Simple drag and drop image sorting.
+*   Batch media library photo upload.
+*   Standard shortcode support for posts.
+*   Widget photo slider for sidebar.
+*   Custom photo slideshow width settings.
 
 = Premium Version Features =
 
-The premium version includes everything in the free version plus:
+The premium upgrade gives you powerful extra options for your photo slider:
 
-* 3 navigation arrow styles
-* 3 slide transition effects (fade, slide, zoom)
-* 4 text overlay options for slides
-* 2 fullscreen display modes
-* Advanced customization settings
-* Slide-specific settings
-* Easy slider import and export
-* Priority email support
+*   3 Different navigation arrow design styles.
+*   Multiple slide animation transitions like fade and zoom.
+*   Advanced text overlay options for image descriptions.
+*   Full screen display toggle for heavy visual impacts.
+*   Dedicated priority email support queue access.
 
 == Installation ==
 
-1. Upload the plugin folder to `/wp-content/plugins/` directory or install directly through WordPress plugins screen.
-2. Activate the plugin through the 'Plugins' menu in WordPress.
-3. Go to the Responsive Slider Gallery menu in your admin dashboard.
-4. Click "Add New Gallery" and upload your images.
-5. Configure slider settings as needed.
-6. Copy the shortcode from the bottom of the settings page.
-7. Paste the shortcode in any page, post, or text widget.
+1.  Upload plugin files to your WordPress site via the plugins dashboard.
+2.  Activate "Responsive Slider Gallery" through the menu.
+3.  Click "Add New Gallery" in the sidebar menu.
+4.  Select your photos and configure your image slider settings.
+5.  Save your draft and copy the resulting shortcode.
+6.  Paste shortcode into any page to render the image slider.
 
 == Frequently Asked Questions ==
 
-= How do I add a responsive slider to my page? =
+= How do I create my first image slider? =
 
-After creating your slider gallery, copy the shortcode shown at the bottom of the settings page. Then paste this shortcode into any page or post where you want the image slider to appear.
+Click "Add New Slider" in your dashboard and upload your photo library items. Arrange them in the grid, save your draft, and copy the shortcode.
 
-= Can I use this slider in widget areas? =
+= Can I put this photo slider into sidebar widgets? =
 
-Yes. You can add the slider shortcode to any text widget in your sidebar or footer. The responsive slider will automatically adjust to the widget width.
+Yes, absolutely. Just copy the generated shortcode and paste it into a standard text widget. The image slider automatically adapts to the widget width.
 
-= Is this slider mobile-friendly? =
+= Is the slideshow mobile-friendly on iPhones? =
 
-Absolutely. The slider automatically adapts to different screen sizes. Your image slideshow will look good on phones, tablets, and desktop computers.
+Yes. The plugin is coded with responsive flex layouts. Your image photo slider will look beautiful on any mobile screen size.
 
-= How many images can I add to a slideshow? =
+= What type of photo file formats work? =
 
-There is no fixed limit. You can add as many images as you need to your slider gallery. However, for optimal loading speed, we recommend keeping slideshows under 20-30 images.
+You can upload any common photo type. The slider supports standard JPG, PNG, GIF, and modern WebP image files perfectly.
 
-= Can I change the slider navigation style? =
+= Does this image slider work with Elementor? =
 
-The free version includes standard navigation arrows. The premium version offers 3 different navigation arrow styles to match your website design.
-
-= Does this work with Elementor and other page builders? =
-
-Yes. Since the slider uses a standard WordPress shortcode, it works with Elementor, Beaver Builder, Divi, and other page builders. Simply add a shortcode element and paste your slider shortcode.
-
-= How do I make the slider fullscreen? =
-
-Fullscreen display modes are available in the premium version. You can choose between two different fullscreen options depending on how you want the slider to behave.
-
-= Can I add text on the slides? =
-
-Text overlay options are included in the premium version. You can choose from 4 different text positioning and styling options for your slides.
-
-= What image formats are supported? =
-
-The slider supports all standard web image formats including JPG, PNG, GIF, and WebP. Images are loaded from your WordPress media library.
-
-= How do I control slide transition speed? =
-
-You can adjust the transition speed and autoplay settings in the slider settings panel after creating your gallery.
+Yes. You can use the Elementor shortcode block to drop your photo slideshow into any design layer. It works great with Divi too.
 
 == Screenshots ==
 
-1. Slide Show Preview
-2. Slide Show Preview
-3. Slide Show Preview
-4. Slide Show Preview
-5. Slide Show Preview
-6. Slide Show Preview
-7. Slide Show Preview
-8. Slide Show Preview
-9. Slide Show Preview
-10. Slide Show Preview
-11. Slide Show Preview
+1. Photo Slider Preview Display
+2. Image Slide Collection View
+3. Responsive Slider Settings Panel
 
 == Changelog ==
 
+= 1.5.4 = 
+* Date May 13,2026
+* Performance Infrastructure: Converted database operations to high-speed native arrays with built-in safety fallback logic for 100% backward compatibility.
+* Dashboard Intelligence: Integrated an expansive dynamic Documentation Suite and direct support access engine into submenus.
+* Resource Precision: Rewrote the asset router to deliver CSS and JS assets exclusively when the plugin dashboard is live.
+* Security Fortification: Deployed rigid authorization gates and purged redundant legacy widgets/textdomain handlers for streamlined load speeds.
+
 = 1.5.3 =
-* Major UI Modernization: Implemented clean, professional "Indigo" design system across the admin dashboard.
-* New Interactive Tab System: Seamless settings navigation using JavaScript (removes page reloads).
-* Performance Optimization: Removed ~1MB of obsolete image assets and redundant code.
-* Enhanced UX: Fixed tab persistence and added "Return to Top" functionality.
+* Major UI Modernization: Updated the admin dashboard to a cleaner indigo theme.
+* New Tab System: Switch settings quickly without waiting for page reloads.
+* Performance: Removed redundant code for a faster loading interface.
 
 = 1.5.1 =
-* Major UI/UX Improvements
-* Setting layout Update
-* Beautiful gradient hero section with purple theme
-* Testing plugin for wordpress 6.9
+* UI design updates and layout improvements.
+* Added beautiful gradient sections to the hero header.
+* Full compatibility testing for WordPress version 6.9.
 
 = 1.5.0 =
-* Testing plugin for wordpress 6.8.3
-
-= 1.4.9 =
-* Testing plugin for wordpress 6.8.1
-
-= 1.4.8 =
-* Testing plugin for wordpress 6.7.2
-
-= 1.4.7 =
-* Testing plugin for wordpress 6.7.1
-
-= 1.4.6 =
-* Testing plugin for wordpress 6.6.2
-
-= 1.4.5 =
-* Testing plugin for wordpress 6.6.1
-
-= 1.4.4 =
-* Testing plugin for wordpress 6.5.4
-
-= 1.4.3 =
-* Bug Fix: Fixed.
-* Additional changes: None.
-* Testing plugin for wordpress 6.4.2
+* Verified framework functions correctly on latest updates.
 
 == Upgrade Notice ==
 
-= 1.5.3 =
-Major UI overhaul, performance optimizations, and bug fixes. Highly recommended update.
+= 1.5.4 =
+High-speed architecture upgrade and dynamic dashboard docs. 100% safe, backward compatible, and highly recommended.
 
-= 1.5.2 =
-UI/UX improvements and WordPress 6.9 compatibility. Recommended update.
+= 1.5.3 =
+A major speed boost and dashboard cleanup. Highly recommended for active users.
