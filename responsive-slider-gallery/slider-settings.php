@@ -339,7 +339,7 @@ if (!defined('ABSPATH')) {
 
 						<!-- CTA Buttons -->
 						<div class="rsg-upgrade-actions">
-							<a href="<?php echo esc_url('https://awplife.com/wordpress-plugins/responsive-slider-gallery-premium/'); ?>"
+							<a href="<?php echo esc_url('https://awplife.com/wordpress-plugins/responsive-slider-gallery-wordpress-plugin/'); ?>"
 								target="_blank" rel="noopener noreferrer" class="rsg-btn-upgrade-primary">
 								<span class="dashicons dashicons-cart"></span>
 								<?php esc_html_e('Buy Premium Version', 'responsive-slider-gallery'); ?>

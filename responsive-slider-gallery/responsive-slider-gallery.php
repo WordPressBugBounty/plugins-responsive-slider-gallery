@@ -7,7 +7,7 @@
  * Plugin Name:       Responsive Slider Gallery
  * Plugin URI:        https://awplife.com/wordpress-plugins/responsive-slider-gallery-premium/
  * Description:       A Responsive Simple Beautiful Easy Powerful CSS & JS Based WordPress Image Slider Gallery Plugin [standard]
- * Version:           1.5.4
+ * Version:           1.5.5
  * Requires at least: 5.4
  * Requires PHP:      7.2
  * Author:            A WP Life
@@ -56,7 +56,7 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 			/**
 			 * Plugin Version
 			 */
-			define('RSG_PLUGIN_VER', '1.5.4');
+			define('RSG_PLUGIN_VER', '1.5.5');
 
 
 			/**
@@ -78,8 +78,6 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 			 * Plugin Directory URL
 			 */
 			define('RSG_PLUGIN_URL', plugin_dir_url(__FILE__));
-
-
 
 		} // end of constructor function
 
@@ -188,8 +186,6 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 			}
 		}
 
-
-
 		/**
 		 * Responsive Slider Gallery Custom Post
 		 * Create slider post type in admin dashboard.
@@ -272,8 +268,6 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 		public function upload_multiple_images($post)
 		{
 			?>
-
-
 			<!--Add New Slide Button-->
 			<?php wp_nonce_field('rsg_add_images', 'rsg_add_images_nonce'); ?>
 
@@ -407,7 +401,6 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 					update_post_meta($post_id, $awl_slider_shortcode_setting, $allslidesetting);
 				}
 			}
-
 		}
 
 		/**
@@ -472,8 +465,6 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 		// css & JS
 	}
 	add_action('wp_enqueue_scripts', 'awplife_rsg_register_scripts');
-
-
 
 	/**
 	 * Instantiates the Class

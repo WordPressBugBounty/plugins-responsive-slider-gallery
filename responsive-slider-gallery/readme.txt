@@ -3,8 +3,8 @@ Contributors: awordpresslife, razipathhan, hanif0991, muhammadshahid, fkfaisalkh
 Donate link: https://paypal.me/awplife
 Tags: responsive slider, image slider, slideshow, photo slider, slider gallery
 Requires at least: 5.4
-Tested up to: 6.9
-Stable tag: 1.5.4
+Tested up to: 7.0
+Stable tag: 1.5.5
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -114,6 +114,10 @@ Yes. You can use the Elementor shortcode block to drop your photo slideshow into
 3. Responsive Slider Settings Panel
 
 == Changelog ==
+
+= 1.5.4 = 
+* Date July 27,2026
+* Premium version link fixed.
 
 = 1.5.4 = 
 * Date May 13,2026
