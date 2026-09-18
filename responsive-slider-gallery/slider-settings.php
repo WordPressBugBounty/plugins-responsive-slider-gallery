@@ -52,7 +52,22 @@ if (!defined('ABSPATH')) {
 						if (is_array($meta_raw)) {
 							$allslidesetting = $meta_raw;
 						} elseif (!empty($meta_raw) && is_string($meta_raw)) {
-							$allslidesetting = unserialize(base64_decode($meta_raw));
+							$allslidesetting = array();
+							$trimmed = trim($meta_raw);
+							$decoded = base64_decode($trimmed);
+							if (!empty($decoded) && is_serialized($decoded)) {
+								$unserialized = @unserialize($decoded, array('allowed_classes' => false));
+								if (is_array($unserialized)) {
+									$allslidesetting = $unserialized;
+									update_post_meta($post->ID, 'awl_slider_settings_' . $post->ID, $allslidesetting);
+								}
+							} elseif (is_serialized($trimmed)) {
+								$unserialized = @unserialize($trimmed, array('allowed_classes' => false));
+								if (is_array($unserialized)) {
+									$allslidesetting = $unserialized;
+									update_post_meta($post->ID, 'awl_slider_settings_' . $post->ID, $allslidesetting);
+								}
+							}
 						} else {
 							$allslidesetting = array();
 						}

@@ -54,7 +54,22 @@ function responsive_slider_shortcode($atts)
             if (is_array($meta_value)) {
                 $allslidesetting = $meta_value;
             } elseif (!empty($meta_value) && is_string($meta_value)) {
-                $allslidesetting = unserialize(base64_decode($meta_value));
+                $allslidesetting = array();
+                $trimmed = trim($meta_value);
+                $decoded = base64_decode($trimmed);
+                if (!empty($decoded) && is_serialized($decoded)) {
+                    $unserialized = @unserialize($decoded, array('allowed_classes' => false));
+                    if (is_array($unserialized)) {
+                        $allslidesetting = $unserialized;
+                        update_post_meta($current_post_id, 'awl_slider_settings_' . $current_post_id, $allslidesetting);
+                    }
+                } elseif (is_serialized($trimmed)) {
+                    $unserialized = @unserialize($trimmed, array('allowed_classes' => false));
+                    if (is_array($unserialized)) {
+                        $allslidesetting = $unserialized;
+                        update_post_meta($current_post_id, 'awl_slider_settings_' . $current_post_id, $allslidesetting);
+                    }
+                }
             } else {
                 $allslidesetting = array();
             }

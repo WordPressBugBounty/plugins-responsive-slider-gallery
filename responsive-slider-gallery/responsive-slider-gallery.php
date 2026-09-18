@@ -7,7 +7,7 @@
  * Plugin Name:       Responsive Slider Gallery
  * Plugin URI:        https://awplife.com/wordpress-plugins/responsive-slider-gallery-premium/
  * Description:       A Responsive Simple Beautiful Easy Powerful CSS & JS Based WordPress Image Slider Gallery Plugin [standard]
- * Version:           1.5.5
+ * Version:           1.5.6
  * Requires at least: 5.4
  * Requires PHP:      7.2
  * Author:            A WP Life
@@ -56,7 +56,7 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 			/**
 			 * Plugin Version
 			 */
-			define('RSG_PLUGIN_VER', '1.5.5');
+			define('RSG_PLUGIN_VER', '1.5.6');
 
 
 			/**
@@ -277,6 +277,11 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 
 		public function _rsg_ajax_callback_function($id)
 		{
+			$post = get_post($id);
+			if (!$post || $post->post_type !== 'attachment') {
+				return;
+			}
+
 			$thumbnail = wp_get_attachment_image_src($id, 'medium', true);
 
 			if (!$thumbnail) {
@@ -368,13 +373,15 @@ if (!class_exists('Responsive_Slider_Gallery')) {
 						$image_ids[] = $sanitized_id;
 						$image_titles[] = $sanitized_title;
 
-						// PERFORMANCE OPTIMIZATION: Only execute update if text has actually changed.
-						if (get_the_title($sanitized_id) !== $sanitized_title) {
-							$single_image_update = array(
-								'ID' => $sanitized_id,
-								'post_title' => $sanitized_title,
-							);
-							wp_update_post($single_image_update);
+						// PERFORMANCE OPTIMIZATION & SECURITY: Only update title if user can edit attachment and title changed.
+						if (get_post_type($sanitized_id) === 'attachment' && current_user_can('edit_post', $sanitized_id)) {
+							if (get_the_title($sanitized_id) !== $sanitized_title) {
+								$single_image_update = array(
+									'ID' => $sanitized_id,
+									'post_title' => $sanitized_title,
+								);
+								wp_update_post($single_image_update);
+							}
 						}
 					}
 

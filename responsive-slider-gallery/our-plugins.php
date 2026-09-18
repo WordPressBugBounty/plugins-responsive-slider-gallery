@@ -11,8 +11,8 @@ if ( ! function_exists( 'plugins_api' ) ) {
 $author_slug = 'awordpresslife';
 $transient_key = 'ig_our_plugins_data';
 
-// Force refresh the data to apply new categorization rules
-if ( isset($_GET['refresh_plugins']) ) {
+// Force refresh the data to apply new categorization rules with CSRF protection
+if ( isset($_GET['refresh_plugins']) && isset($_GET['_rsg_refresh_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['_rsg_refresh_nonce'])), 'rsg_refresh_plugins_action') ) {
     delete_transient( $transient_key );
 }
 
@@ -211,7 +211,7 @@ usort( $filtered_plugins, function ( $a, $b ) {
         <button class="ig-filter-btn" data-filter="social"><?php esc_html_e( 'Social Media', 'new-image-gallery' ); ?></button>
         <button class="ig-filter-btn" data-filter="technical"><?php esc_html_e( 'Technical Tools', 'new-image-gallery' ); ?></button>
         
-        <a href="<?php echo esc_url( add_query_arg( 'refresh_plugins', '1' ) ); ?>" class="ig-refresh-link" title="<?php esc_attr_e( 'Sync with WordPress.org', 'new-image-gallery' ); ?>">
+        <a href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'refresh_plugins', '1' ), 'rsg_refresh_plugins_action', '_rsg_refresh_nonce' ) ); ?>" class="ig-refresh-link" title="<?php esc_attr_e( 'Sync with WordPress.org', 'responsive-slider-gallery' ); ?>">
             <span class="dashicons dashicons-update"></span>
         </a>
     </nav>

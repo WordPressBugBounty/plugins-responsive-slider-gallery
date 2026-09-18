@@ -4,7 +4,7 @@ Donate link: https://paypal.me/awplife
 Tags: responsive slider, image slider, slideshow, photo slider, slider gallery
 Requires at least: 5.4
 Tested up to: 7.0
-Stable tag: 1.5.5
+Stable tag: 1.5.6
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -115,8 +115,15 @@ Yes. You can use the Elementor shortcode block to drop your photo slideshow into
 
 == Changelog ==
 
-= 1.5.4 = 
-* Date July 27,2026
+= 1.5.6 =
+* Security Hardening: Secured legacy base64 slider meta deserialization by strictly disabling PHP class instantiations, preventing potential PHP Object Injection.
+* Seamless Migration: Automatic silent upgrade of legacy slider metadata to the modern native array format on display or edit.
+* Access Control: Added attachment verification and strict capability checks before updating attachment titles on save, preventing IDOR.
+* AJAX Security: Enforced strict attachment type validation on slide preview requests to prevent unauthorized post information disclosure.
+* CSRF Protection: Added WordPress nonces to admin transient refresh links.
+
+= 1.5.5 =
+* Date July 27, 2026
 * Premium version link fixed.
 
 = 1.5.4 = 
@@ -140,6 +147,9 @@ Yes. You can use the Elementor shortcode block to drop your photo slideshow into
 * Verified framework functions correctly on latest updates.
 
 == Upgrade Notice ==
+
+= 1.5.6 =
+Critical security hardening for legacy data deserialization and access control improvements. Fully backward compatible and highly recommended for all users.
 
 = 1.5.4 =
 High-speed architecture upgrade and dynamic dashboard docs. 100% safe, backward compatible, and highly recommended.
